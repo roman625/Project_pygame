@@ -206,6 +206,7 @@ class Board:
     def buy_house(self):# реализация покупки домов
         pygame.init()
         global player1_cash, player2_cash, player3_cash
+        # списоки улиц с одинаковыми расценками
         blue_street = ['mediter-ranean avenue', 'baltic avenue', 'oriental avenue',
                        'vermont avenue', 'connecticut avenue']
         pink_street = ['st. charles place', 'states avenue', 'virginia avenue',
@@ -310,6 +311,7 @@ class Board:
                                 res = cur.execute(f"""SELECT houses FROM street WHERE street_ = '{sell_street}'""")
                                 for i in res:
                                     kol_house = i[0]
+                                # изменение ренты засчет покупки домов
                                 if kol_house == 1:
                                     con = sqlite3.connect('streets_db.sqlite')
                                     cur = con.cursor()
@@ -366,6 +368,7 @@ class Board:
                              '16', '18', '19', '21', '23', '24', '26',
                              '27', '29', '28', '12', '5', '15', '25',
                              '35', '31', '32', '34', '39', '37']
+        # взятие налогов
         if play in self.rec[4]:
             if play == '1':
                 player1_cash -= 200
@@ -380,6 +383,7 @@ class Board:
                 player2_cash -= 100
             if play == '3':
                 player3_cash -= 100
+        # проверка находится ли игрок на чужой улице, если да то снятие денег
         for i in range(0, 40):
             self.rec = list(place_player.values())
             self.kek = list(place_player.keys())
@@ -415,6 +419,7 @@ class Board:
 
 def check_winner_player():# проверка победы или проигрыша игрока
     global player1_cash, player2_cash, player3_cash
+    # удаление его из списка игроков
     if player1_cash < 0:
         for i in range(len(place_player)):
             rec = list(place_player.values())
@@ -499,6 +504,7 @@ def playing_field():# функция для вызывания основног�
         text8 = f1.render('Игрок 1', 1, (0, 0, 0))
         text9 = f1.render('Игрок 2', 1, (0, 0, 0))
         text10 = f1.render('Игрок 3', 1, (0, 0, 0))
+        # приложение картинок к полю
         Monopoly_image([330, 68], [load_image("image/monopoly1.png")])
         Monopoly_image([241, 150], [load_image("image/monopoly2.png")])
         Monopoly_image([630, 150], [load_image("image/monopoly3.png")])
@@ -518,6 +524,7 @@ def playing_field():# функция для вызывания основног�
                         board.get_cell(event.pos, screen)
             screen.fill((255, 255, 255))
             board.draw_place(screen)
+            # печать текста на поле
             screen.blit(text1, (50, 50))
             screen.blit(text2, (50, 150))
             screen.blit(text3, (50, 250))
@@ -578,7 +585,7 @@ def info_street():# получение информации для улиц
                         result = cur.execute(f"""SELECT * FROM street WHERE street_ = '{info_street}'""")
                         parametr = []
                         for i in result:
-                            parametr.append(i)
+                            parametr.append(i)# добавление улиц в параметры комбобокса
                         text1 = pygame_gui.elements.ui_text_box.UITextBox(
                             html_text=f'улица {parametr[0][1]}, рента {parametr[0][3]}, владелец {parametr[0][4]}, дома {parametr[0][-1]}',
                             relative_rect=pygame.Rect((0, 200), (500, 40)),
@@ -626,15 +633,15 @@ def info_players():# получение информации об игроках
     result3 = cur.execute(f"""SELECT street_ FROM street WHERE owner = '3'""")
     parametr3 = []
     for i in result1:
-        parametr1.append(i[0])
+        parametr1.append(i[0])# список улиц 1 игрока
     if parametr1 == []:
         parametr1 = ['Пусто']
     for i in result2:
-        parametr2.append(i[0])
+        parametr2.append(i[0])# список улиц 2 игрока
     if parametr2 == []:
         parametr2 = ['Пусто']
     for i in result3:
-        parametr3.append(i[0])
+        parametr3.append(i[0])# список улиц 2 игрока
     if parametr3 == []:
         parametr3 = ['Пусто']
     street1 = pygame_gui.elements.ui_drop_down_menu.UIDropDownMenu(
