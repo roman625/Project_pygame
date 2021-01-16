@@ -8,7 +8,7 @@ import sqlite3
 player1_cash = 1500
 player2_cash = 1500
 player3_cash = 1500
-x_y_rect = [(600, 420, 30, 30), (570, 420, 30, 30), (540, 420, 30, 30), (510, 420, 30, 30),
+x_y_rect = [(600, 420, 30, 30), (570, 420, 30, 30), (540, 420, 30, 30), (510, 420, 30, 30), # список с кординатами полей
             (480, 420, 30, 30), (450, 420, 30, 30), (420, 420, 30, 30), (390, 420, 30, 30),
             (360, 420, 30, 30), (330, 420, 30, 30), (300, 420, 30, 30), (300, 390, 30, 30),
             (300, 360, 30, 30), (300, 330, 30, 30), (300, 300, 30, 30), (300, 270, 30, 30),
@@ -18,14 +18,14 @@ x_y_rect = [(600, 420, 30, 30), (570, 420, 30, 30), (540, 420, 30, 30), (510, 42
             (540, 120, 30, 30), (570, 120, 30, 30), (600, 120, 30, 30), (600, 150, 30, 30),
             (600, 180, 30, 30), (600, 210, 30, 30), (600, 240, 30, 30), (600, 270, 30, 30),
             (600, 300, 30, 30), (600, 330, 30, 30), (600, 360, 30, 30), (600, 390, 30, 30)]
-place_player = {'0': ['2', '3', '1']}
+place_player = {'0': ['2', '3', '1']}# словарь с местом расположения игроков
 for i in range(1, 40+1):
     place_player[str(i)] = list()
 play = '1'
 pygame.init()
 
 
-def load_image(name, color_key=None):
+def load_image(name, color_key=None):# функция для загрузки картинки
     try:
         image = pygame.image.load(name).convert()
     except pygame.error as message:
@@ -51,7 +51,7 @@ class Board:
         self.player2_color = (0, 255, 0)
         self.player3_color = (0, 0, 255)
 
-    def draw_place(self, screen):
+    def draw_place(self, screen):# отрисовка поля
         check_winner_player()
         screen.fill((255, 255, 255))
         for i in range(120, 450, 30):
@@ -94,7 +94,7 @@ class Board:
         pygame.draw.ellipse(screen, pygame.Color((0, 255, 0)), (750, 250, 30, 30))
         pygame.draw.ellipse(screen, pygame.Color((0, 0, 255)), (750, 300, 30, 30))
 
-    def get_cell(self, mouse_pos, screen):
+    def get_cell(self, mouse_pos, screen):# функция для идентификации положения мышки
         x = mouse_pos[0]
         y = mouse_pos[1]
         if x >= 50 and x <= 190 and y >= 50 and y <= 70:
@@ -112,7 +112,7 @@ class Board:
         if x >= 750 and x <= 970 and y >= 150 and y <= 170:
             info_street()
 
-    def dice_roll(self, screen):
+    def dice_roll(self, screen):# реализация броска кубика
         global player2_cash, player1_cash, player3_cash, play, player1_roll, player2_roll, player3_roll
         self.roll = random.choice([1, 2, 3, 4, 5, 6]) + random.choice([1, 2, 3, 4, 5, 6])
         if player1_roll == player3_roll:
@@ -124,7 +124,7 @@ class Board:
         elif player2_roll > player3_roll:
             play = '3'
             player3_roll += 1
-        for i in range(len(place_player)):
+        for i in range(len(place_player)):# передвижение игрока в словаре
             self.rec = list(place_player.values())
             self.kek = list(place_player.keys())
             if play in self.rec[i]:
@@ -154,7 +154,7 @@ class Board:
         check_winner_player()
         self.check_place_player()
 
-    def buy_street(self):
+    def buy_street(self):# функция для покупки улицы
         global player2_cash, player1_cash, player3_cash
         for i in range(0, 40):
             self.rec = list(place_player.values())
@@ -189,7 +189,7 @@ class Board:
                             print("Это куплено")
         check_winner_player()
 
-    def check_cash(self, cost):
+    def check_cash(self, cost):# проверка хватает ли денег игроку
         global player2_cash, player1_cash, player3_cash
         if play == '1':
             if player1_cash - cost > 0:
@@ -203,7 +203,7 @@ class Board:
         else:
             return False
 
-    def buy_house(self):
+    def buy_house(self):# реализация покупки домов
         pygame.init()
         global player1_cash, player2_cash, player3_cash
         blue_street = ['mediter-ranean avenue', 'baltic avenue', 'oriental avenue',
@@ -360,7 +360,7 @@ class Board:
             clock.tick(60)
         pygame.quit()
 
-    def check_place_player(self):
+    def check_place_player(self):# проверка положения на поле игрока
         global player1_cash, player2_cash, player3_cash, play
         place_with_street = ['1', '3', '6', '8', '9', '11', '13', '14',
                              '16', '18', '19', '21', '23', '24', '26',
@@ -413,7 +413,7 @@ class Board:
         check_winner_player()
 
 
-def check_winner_player():
+def check_winner_player():# проверка победы или проигрыша игрока
     global player1_cash, player2_cash, player3_cash
     if player1_cash < 0:
         for i in range(len(place_player)):
@@ -471,7 +471,7 @@ def check_winner_player():
         pygame.quit()
 
 
-def playing_field():
+def playing_field():# функция для вызывания основного поля
     try:
         size = 1000, 600
         screen = pygame.display.set_mode(size, 0, 32)
@@ -536,7 +536,7 @@ def playing_field():
         pass
 
 
-def info_street():
+def info_street():# получение информации для улиц
     pygame.init()
     pygame.display.set_caption('Start')
     window_surface = pygame.display.set_mode((500, 250), 0, 32)
@@ -593,7 +593,7 @@ def info_street():
     pygame.quit()
 
 
-def info_players():
+def info_players():# получение информации об игроках
     global player1_cash, player2_cash, player3_cash
     pygame.init()
     pygame.display.set_caption('Start')
@@ -666,7 +666,7 @@ def info_players():
     pygame.quit()
 
 
-def Sell_Field():
+def Sell_Field():# поле для продажи улицы
     global player1_cash, player2_cash, player3_cash
     pygame.init()
     pygame.display.set_caption('Start')
@@ -743,7 +743,7 @@ def Sell_Field():
     pygame.quit()
 
 
-def Exchange_Field():
+def Exchange_Field():# поле для обмена улицами
     global player1_cash, player2_cash, player3_cash
     pygame.init()
     pygame.display.set_caption('Start')
@@ -889,14 +889,14 @@ def Exchange_Field():
     pygame.quit()
 
 
-def create_particles(position):
+def create_particles(position):# создание партиклов
     particle_count = 20
     numbers = range(-5, 6)
     for _ in range(particle_count):
         Particle(position, random.choice(numbers), random.choice(numbers))
 
 
-def clear():
+def clear():# очистка базы данных
     payment = ['2', '4', '6', '6', '8', '10', '10', '12', '14', '14', '16', '18', '18', '20',
                '22', '22', '24', '75', '75', '100', '100', '100', '100', '26', '26', '28', '50', '35']
     for i in range(1, 29):
@@ -909,7 +909,7 @@ def clear():
         con.close()
 
 
-pygame.init()
+pygame.init()# запуск начального окна
 clear()
 WIDTH = 300
 HEIGHT = 300
