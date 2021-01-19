@@ -956,6 +956,7 @@ class Particle(pygame.sprite.Sprite):
 
 try:
     pygame.mixer.music.load("dlya_programmy.mp3")
+    pygame.mixer.music.set_volume(0.03)
     pygame.mixer.music.play(-1)
     all_sprites = pygame.sprite.Group()
     clock = pygame.time.Clock()
